@@ -9,9 +9,9 @@ data <- read_sheet("https://docs.google.com/spreadsheets/d/1cBqcR3uX8GSCmfI8ZRlN
 
 
 #
-# Numero total de referencias
+# Numero total de referencias - 88
 #
-total_references <- data %>% 
+data %>% 
   summarize(n = n()) %>% 
   pull()
 
@@ -19,7 +19,12 @@ total_references <- data %>%
 #
 # Analise por linguagem
 #
-per_language <- data %>% 
+# English       74
+# Spanish        9
+# Portuguese     4
+# Chinese        1
+#
+data %>% 
   group_by(Language) %>% 
   summarize(n = n()) %>% 
   arrange(desc(n))
@@ -28,7 +33,10 @@ per_language <- data %>%
 #
 # Analise por tipo
 #
-per_type <- data %>% 
+# Primary      72
+# Secondary    16
+#
+data %>% 
   group_by(Type) %>% 
   summarize(n = n()) %>% 
   arrange(desc(n))
@@ -37,7 +45,16 @@ per_type <- data %>%
 #
 # Analise por ano
 #
-per_year <- data %>% 
+# 2022     5
+# 2021    12
+# 2020    11
+# 2019    16
+# 2018    19
+# 2017    13
+# 2016    11
+# 2015     1
+#
+data %>% 
   group_by(PubYear) %>% 
   summarize(n = n()) %>% 
   arrange(desc(PubYear))
@@ -46,7 +63,14 @@ per_year <- data %>%
 #
 # Analise por tipo de veiculo
 #
-per_vehicle_type <- data %>% 
+# Journal             50
+# Conference          26
+# DSc Thesis           6
+# MSc Dissertation     3
+# Book                 2
+# Thesis               1
+#
+data %>% 
   group_by(VehicleType) %>% 
   summarize(n = n()) %>% 
   arrange(desc(n))
@@ -55,7 +79,18 @@ per_vehicle_type <- data %>%
 #
 # Analise por palavra chave
 #
-per_keyword <- data %>% 
+# requirements prioritization          26
+# search-based software engineering    20
+# next release problem                 16
+# multi-objective optimization          9
+# requirements engineering              9
+# requirements selection                9
+# software requirements                 7
+# analytic hierarchy process            5
+# meta-heuristics                       5
+# release planning                      5
+#
+data %>% 
   select(Keywords) %>% 
   separate_rows(Keywords, sep=",") %>% 
   filter(!is.na(Keywords)) %>% 
@@ -67,6 +102,15 @@ per_keyword <- data %>%
 
 #
 # Analise por grupo de palavra chave
+#
+# Research field        96
+# Software process      91
+# N/A                   59
+# Concept               38
+# Algorithm             30
+# Quality indicator     15
+# Research technique    14
+# Business              11
 #
 keyword_to_group <- tribble(
   ~Keywords,                                           ~KeywordsGroup,
@@ -245,6 +289,17 @@ keyword_to_group <- tribble(
   "value-added features",                              "N/A",
   "value-related dependencies",                        "N/A",
   "vop",                                               "N/A",
+  "agile software developmnets",                       "Software process",
+  "data analytics",                                    "Research field",
+  "software enhancements projects",                    "N/A",
+  "delivery speed prediction",                         "N/A",
+  "feature construction",                              "N/A",
+  "search methods",                                    "Algorithm",
+  "simulated annealing",                               "Algorithm",
+  "isbsg",                                             "N/A",
+  "system mapping study",                              "Research technique",
+  "evidence-based software engineering",               "Research field",
+  "large-scale requirements",                          "N/A"
 )
 
 missing_keywords <- data %>% 
@@ -259,7 +314,7 @@ if (nrow(missing_keywords) > 0) {
   missing_keywords %>% print(n = 1000)
 }
 
-per_keyword_group <- data %>% 
+data %>% 
   select(Keywords) %>% 
   separate_rows(Keywords, sep=",") %>% 
   filter(!is.na(Keywords)) %>% 
@@ -273,7 +328,18 @@ per_keyword_group <- data %>%
 #
 # Analise por universidade
 #
-per_university <- data %>% 
+# islamic azad university                        5
+# jamia millia islamia                           5
+# universidad of almeria                         5
+# flinders university                            4
+# beihang university                             3
+# indian institute of science                    3
+# universidad de córdoba                         3
+# universidad de málaga                          3
+# universidade tecnológica federal do paraná     3
+# universiti malaysia pahang                     3
+#
+data %>% 
   select(University) %>% 
   separate_rows(University, sep=",") %>% 
   filter(!is.na(University)) %>% 
@@ -287,7 +353,18 @@ per_university <- data %>%
 #
 # Analise por pais
 #
-per_country <- data %>% 
+# spain        14
+# brazil       13
+# india        11
+# china        10
+# malasya       7
+# uk            6
+# australia     5
+# iran          5
+# paquistan     4
+# canada        3
+#
+data %>% 
   select(Country) %>% 
   separate_rows(Country, sep=",") %>% 
   filter(!is.na(Country)) %>% 
@@ -299,6 +376,13 @@ per_country <- data %>%
 
 #
 # Analise por continente
+#
+# asia             48
+# europe           31
+# south america    14
+# north america     7
+# oceania           7
+# africa            5
 #
 country_to_continent <- tribble(
   ~Country,           ~Continent,
@@ -329,7 +413,8 @@ country_to_continent <- tribble(
   "oman",             "asia",
   "south africa",     "africa",
   "south korea",      "asia",
-  "tunisia",          "africa"
+  "tunisia",          "africa",
+  "mexico",           "north america"
 )
 
 missing_countries <- data %>% 
@@ -344,7 +429,7 @@ if (nrow(missing_countries) > 0) {
   missing_countries %>% print(n = 1000)
 }
 
-per_continent <- data %>% 
+data %>% 
   select(Country) %>% 
   separate_rows(Country, sep=",") %>% 
   filter(!is.na(Country)) %>% 
